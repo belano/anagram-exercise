@@ -15,12 +15,25 @@ public class App
 		}
 
 		String path = args[0];
-		Poem poem = new Poem(path, new FileSystemPoemReader(), new PoemParser());
+		Poem poem = getPoem(path);
+		if (poem == null) {
+			System.exit(0);
+		}
+
 		boolean isAnagrammatic = poem.isAnagrammatic();
 		if (isAnagrammatic) {
 			System.out.println("True - Your poem was detected as anagrammatic");
 		} else {
 			System.out.println("False - Your poem was detected as NON anagrammatic");
+		}
+	}
+
+	public static Poem getPoem(String path) {
+		try {
+			return new Poem(path, new FileSystemPoemReader(), new PoemParser());
+		} catch (Exception e) {
+			System.out.println("Could not read poem due to: " + e.getMessage());
+			return null;
 		}
 	}
 
