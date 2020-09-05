@@ -5,11 +5,12 @@ package com.belano;
  */
 public interface PoemReader {
 
-	/**
-	 * Reads poem content as string
-	 * @param path file path
-	 * @return poem content as string
-	 */
-	String readContent(String path);
+    /**
+     * Reads poem content as string
+     *
+     * @param path file path
+     * @return poem content as string
+     */
+    String readContent(String path);
 
 }

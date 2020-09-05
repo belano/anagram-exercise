@@ -5,7 +5,7 @@ Anagram exercise
 
 ## Requirements
 
-jdk 6, maven 3+ and git must be installed in order to run the project locally.
+jdk 8, maven 3+ and git must be installed in order to run the project locally.
 
 ## Cloning the repository and running tests
 

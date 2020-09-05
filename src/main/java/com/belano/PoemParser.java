@@ -3,23 +3,33 @@ package com.belano;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Parses poem content from string into poem lines
+ * Parses poem content from path into poem lines
  */
 public class PoemParser {
 
-	final static Logger logger = LoggerFactory.getLogger(PoemParser.class);
+    final static Logger logger = LoggerFactory.getLogger(PoemParser.class);
 
-	public List<PoemLine> parsePoem(String poemContent) {
-		List<PoemLine> lines = new ArrayList<PoemLine>();
-		String[] poemLines = poemContent.split(System.getProperty("line.separator"));
-		for (int i = 0; i < poemLines.length; i++) {
-			logger.info("this is line: {}", poemLines[i]);
-			lines.add(new PoemLine(poemLines[i]));
-		}
-		return lines;
-	}
+    final PoemReader reader;
+
+    public PoemParser(PoemReader reader) {
+        this.reader = reader;
+    }
+
+    public List<PoemLine> parsePoem(String poemPath) {
+        List<PoemLine> lines = new ArrayList<>();
+        String poemContent = reader.readContent(poemPath);
+        String[] poemLines = poemContent.split(System.getProperty("line.separator"));
+        Arrays.stream(poemLines)
+                .forEach(poemLine -> {
+                    logger.info("this is line: {}", poemLine);
+                    lines.add(new PoemLine(poemLine));
+                });
+        return lines;
+    }
 }

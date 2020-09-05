@@ -20,51 +20,28 @@ public class PoemTest {
 	public void shouldParsePoemUponConstruction() {
 		// given
 		PoemParser poemParser = mock(PoemParser.class);
-		String poemContent = "This is poem line1"
-				+ System.getProperty("line.separator")
-				+ "This is poem line2";
+		String filePath = "poem.txt";
 
 		// when
-		new Poem(poemContent, poemParser);
+		new Poem(filePath, poemParser);
 
 		// then
-		verify(poemParser).parsePoem(poemContent);
-	}
-
-	@Test
-	public void shouldReadAndParsePoemUponConstruction() {
-		// given
-		PoemParser poemParser = mock(PoemParser.class);
-		PoemReader poemReader = mock(PoemReader.class);
-		String poemFilePath = "/tmp/poem.txt";
-		String poemContent = "This is poem line1"
-				+ System.getProperty("line.separator")
-				+ "This is poem line2";
-		stub(poemReader.readContent(poemFilePath)).toReturn(poemContent);
-
-		// when
-		new Poem(poemFilePath, poemReader, poemParser);
-
-		// then
-		verify(poemReader).readContent(poemFilePath);
-		verify(poemParser).parsePoem(poemContent);
+		verify(poemParser).parsePoem(filePath);
 	}
 
 	@Test
 	public void shouldProvidePoemLinesInOrder() {
 		// given
 		PoemParser poemParser = mock(PoemParser.class);
-		String poemContent = "This is poem line1"
-				+ System.getProperty("line.separator")
-				+ "This is poem line2";
+		String filePath = "poem.txt";
 		List<PoemLine> expectedLines = Arrays.asList(
 				new PoemLine("This is poem line1"),
 				new PoemLine("This is poem line2")
 		);
-		stub(poemParser.parsePoem(poemContent)).toReturn(expectedLines);
+		stub(poemParser.parsePoem(filePath)).toReturn(expectedLines);
 
 		// when
-		Poem poem = new Poem(poemContent, poemParser);
+		Poem poem = new Poem(filePath, poemParser);
 		List<PoemLine> actualLines = poem.poemLines();
 
 		// then
@@ -75,23 +52,17 @@ public class PoemTest {
 	public void shouldReturnTrueWhenPoemIsAnagrammatic() {
 		// given
 		PoemParser poemParser = mock(PoemParser.class);
-		String poemContent = "A hard, howling, tossing water scene."
-				+ System.getProperty("line.separator")
-				+ "Strong tide was washing hero clean."
-				+ System.getProperty("line.separator")
-				+ "\"How cold!\" Weather stings as in anger."
-				+ System.getProperty("line.separator")
-				+ "O Silent night shows war ace danger!";
+		String filePath = "poem.txt";
 		List<PoemLine> expectedLines = Arrays.asList(
 				new PoemLine("A hard, howling, tossing water scene."),
 				new PoemLine("Strong tide was washing hero clean."),
 				new PoemLine("\"How cold!\" Weather stings as in anger."),
 				new PoemLine("O Silent night shows war ace danger!")
 		);
-		stub(poemParser.parsePoem(poemContent)).toReturn(expectedLines);
+		stub(poemParser.parsePoem(filePath)).toReturn(expectedLines);
 
 		// when
-		Poem poem = new Poem(poemContent, poemParser);
+		Poem poem = new Poem(filePath, poemParser);
 
 		//then
 		assertThat(poem.isAnagrammatic(), is(true));
@@ -99,7 +70,7 @@ public class PoemTest {
 
 	@Test
 	public void shouldReturnTrueWhenReadFromFileAndPoemIsAnagrammatic() {
-		Poem poem = new Poem("anagrammatic-poem.txt", new ClasspathFilePoemReader(), new PoemParser());
+		Poem poem = new Poem("anagrammatic-poem.txt", new PoemParser(new ClasspathFilePoemReader()));
 		assertThat(poem.isAnagrammatic(), is(true));
 	}
 
@@ -107,23 +78,17 @@ public class PoemTest {
 	public void shouldReturnFalseWhenPoemIsNotAnagrammatic() {
 		// given
 		PoemParser poemParser = mock(PoemParser.class);
-		String poemContent = "Said the little boy, \"Sometimes I drop my spoon.\""
-				+ System.getProperty("line.separator")
-				+ "Said the old man, \"I do that too.\""
-				+ System.getProperty("line.separator")
-				+ "The little boy whispered, \"I wet my pants.\""
-				+ System.getProperty("line.separator")
-				+ "\"I do that too,\" laughed the little old man.";
+		String filePath = "poem.txt";
 		List<PoemLine> expectedLines = Arrays.asList(
 				new PoemLine("Said the little boy, \"Sometimes I drop my spoon.\""),
 				new PoemLine("Said the old man, \"I do that too.\""),
 				new PoemLine("The little boy whispered, \"I wet my pants.\""),
 				new PoemLine("\"I do that too,\" laughed the little old man.")
 		);
-		stub(poemParser.parsePoem(poemContent)).toReturn(expectedLines);
+		stub(poemParser.parsePoem(filePath)).toReturn(expectedLines);
 
 		// when
-		Poem poem = new Poem(poemContent, poemParser);
+		Poem poem = new Poem(filePath, poemParser);
 
 		//then
 		assertThat(poem.isAnagrammatic(), is(false));
@@ -131,7 +96,7 @@ public class PoemTest {
 
 	@Test
 	public void shouldReturnFalseWhenReadFromFileAndPoemIsNotAnagrammatic() {
-		Poem poem = new Poem("non-anagrammatic-poem.txt", new ClasspathFilePoemReader(), new PoemParser());
+		Poem poem = new Poem("non-anagrammatic-poem.txt", new PoemParser(new ClasspathFilePoemReader()));
 		assertThat(poem.isAnagrammatic(), is(false));
 	}
 
